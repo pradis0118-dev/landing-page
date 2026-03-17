@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>David Pradis — Finanzas Inteligentes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Raleway:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --g:    #034837;
+  --g2:   #0a6b52;
+  --g3:   rgba(3,72,55,.08);
+  --br:   #553519;
+  --br2:  #7a5030;
+  --bei:  #CCC5B1;
+  --bei2: #E8E3D5;
+  --st:   #A0B0B5;
+  --oli:  #5A563D;
+  --cr:   #F5F2EC;
+  --wh:   #FEFCF8;
+  --tx:   #1C1A17;
+  --txm:  #4A4438;
+  --txd:  #8A8070;
+  --warn: #92400e;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--wh);color:var(--tx);font-family:'Raleway',sans-serif;overflow-x:hidden}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:999;background:rgba(254,252,248,.96);backdrop-filter:blur(14px);border-bottom:1px solid rgba(204,197,177,.3);display:flex;align-items:center;justify-content:space-between;padding:16px 56px}
+.nav-logo{display:flex;align-items:center;gap:12px}
+.nav-logo-icon{width:36px;height:36px;background:var(--g);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;color:var(--wh)}
+.nav-logo-text{display:flex;flex-direction:column;line-height:1}
+.nav-logo-name{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:400;letter-spacing:4px;text-transform:uppercase;color:var(--g)}
+.nav-logo-tag{font-size:.45rem;letter-spacing:3px;text-transform:uppercase;color:var(--txd);margin-top:3px}
+.nav-links{display:flex;align-items:center;gap:32px}
+.nav-a{font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--txm);text-decoration:none;transition:color .3s}
+.nav-a:hover{color:var(--g)}
+.nav-cta{background:var(--g);color:var(--wh);font-family:'Raleway',sans-serif;font-size:.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:13px 26px;text-decoration:none;border-radius:4px;transition:background .3s,transform .2s}
+.nav-cta:hover{background:var(--g2);transform:translateY(-1px)}
+
+/* ── HERO ── */
+.hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;padding:100px 80px 80px;gap:60px;background:var(--wh);position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;bottom:-100px;right:-120px;width:500px;height:500px;border-radius:50%;background:var(--bei2);opacity:.5;pointer-events:none}
+.hero-tag{font-size:.55rem;letter-spacing:4px;text-transform:uppercase;color:var(--br);margin-bottom:20px;font-weight:600}
+.hero-h1{font-family:'Cormorant Garamond',serif;font-size:clamp(2.8rem,5vw,5rem);font-weight:600;line-height:1.1;color:var(--tx);margin-bottom:20px}
+.hero-h1 .accent{color:var(--g);font-style:italic}
+.hero-sub{font-size:.9rem;line-height:1.8;color:var(--txm);font-weight:300;margin-bottom:10px}
+.hero-sub b{color:var(--g);font-weight:700}
+.hero-sub2{font-size:.88rem;line-height:1.8;color:var(--txm);font-weight:600;margin-bottom:32px}
+.hero-btns{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:24px}
+.btn-green{display:inline-flex;align-items:center;gap:8px;background:var(--g);color:var(--wh);font-family:'Raleway',sans-serif;font-size:.65rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:16px 30px;text-decoration:none;border-radius:6px;border:none;cursor:pointer;transition:all .3s}
+.btn-green:hover{background:var(--g2);transform:translateY(-2px);box-shadow:0 6px 24px rgba(3,72,55,.25)}
+.btn-outline-g{display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--g);font-family:'Raleway',sans-serif;font-size:.65rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:15px 28px;text-decoration:none;border-radius:6px;border:2px solid var(--g);cursor:pointer;transition:all .3s}
+.btn-outline-g:hover{background:var(--g);color:var(--wh)}
+.hero-stars{display:flex;align-items:center;gap:10px;font-size:.75rem;color:var(--txd)}
+.hero-stars .stars{color:#f59e0b;font-size:.95rem}
+.hero-right{position:relative}
+.hero-video{width:100%;border-radius:12px;overflow:hidden;position:relative;background:#1c1a17;aspect-ratio:16/10;display:flex;align-items:center;justify-content:center;box-shadow:0 20px 60px rgba(0,0,0,.15)}
+.hero-video-placeholder{text-align:center;color:rgba(255,255,255,.3)}
+.hero-video-placeholder .play-icon{width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin:0 auto 12px;cursor:pointer;transition:all .3s}
+.hero-video-placeholder .play-icon:hover{background:var(--g);border-color:var(--g)}
+.hero-video-placeholder p{font-size:.6rem;letter-spacing:3px;text-transform:uppercase}
+.hero-video-tag{position:absolute;top:16px;left:16px;background:rgba(3,72,55,.9);color:var(--wh);font-size:.5rem;letter-spacing:2px;text-transform:uppercase;padding:6px 12px;border-radius:4px}
+
+/* ── CALCULADORA ── */
+.calc-section{background:var(--wh);padding:80px}
+.calc-title{font-family:'Raleway',sans-serif;font-weight:800;font-size:clamp(1.6rem,3vw,2.4rem);text-align:center;margin-bottom:48px;color:var(--tx)}
+.calc-box{max-width:760px;margin:0 auto}
+.calc-card{background:var(--g);border-radius:16px;padding:32px 40px;margin-bottom:24px}
+.calc-card-title{font-weight:800;font-size:1.2rem;color:var(--wh);text-align:center;margin-bottom:6px}
+.calc-card-sub{font-size:.8rem;color:rgba(204,197,177,.75);text-align:center;margin-bottom:28px}
+.calc-inputs{display:grid;grid-template-columns:1fr 1fr;gap:20px;background:var(--wh);border-radius:10px;padding:28px}
+.calc-group label{display:block;font-size:.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--txd);margin-bottom:8px}
+.calc-input{width:100%;border:1.5px solid var(--bei);border-radius:8px;padding:12px 16px;font-family:'Raleway',sans-serif;font-size:.95rem;color:var(--tx);background:var(--cr);outline:none;transition:border-color .3s}
+.calc-input:focus{border-color:var(--g)}
+.calc-btn-wrap{text-align:center;margin-top:20px}
+.btn-brown{display:inline-flex;align-items:center;gap:8px;background:var(--br);color:var(--wh);font-family:'Raleway',sans-serif;font-size:.65rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:16px 36px;text-decoration:none;border-radius:8px;border:none;cursor:pointer;transition:all .3s}
+.btn-brown:hover{background:var(--br2);transform:translateY(-2px);box-shadow:0 6px 24px rgba(85,53,25,.3)}
+.calc-result{display:none;text-align:center;margin-top:20px}
+.calc-result.show{display:block}
+.calc-felicidades{background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:14px;padding:28px 32px;margin-bottom:20px}
+.calc-felicidades-icon{font-size:2.2rem;margin-bottom:8px}
+.calc-felicidades-title{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:1.6rem;color:#166534;margin-bottom:6px}
+.calc-felicidades-text{font-size:.92rem;color:#166534}
+.big-num{font-weight:800;font-size:1.1rem;color:#166534}
+.calc-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px}
+.calc-stat{background:#fff5f0;border:1px solid #fecaca;border-radius:12px;padding:22px 16px;text-align:center}
+.calc-stat-icon{font-size:1.8rem;margin-bottom:10px}
+.calc-stat-label{font-size:.78rem;font-weight:700;color:#553519;margin-bottom:8px}
+.calc-stat-num{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:700;color:#dc2626}
+.calc-chart-card{background:#fff;border:1px solid rgba(204,197,177,.4);border-radius:12px;padding:24px;margin-bottom:16px}
+.calc-chart-title{font-weight:700;font-size:.85rem;color:var(--tx);margin-bottom:16px}
+.calc-chart-wrap{height:200px}
+.calc-csv-btn{background:var(--g);color:var(--wh);border:none;border-radius:8px;padding:12px 24px;font-family:'Raleway',sans-serif;font-size:.75rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:all .3s}
+.calc-csv-btn:hover{background:var(--br);transform:translateY(-2px)}
+.calc-cta-card{background:var(--br);border-radius:16px;padding:36px;text-align:center}
+.calc-cta-title{font-weight:800;font-size:1.1rem;color:var(--wh);margin-bottom:8px}
+.calc-cta-sub{font-size:.82rem;color:rgba(232,227,213,.7);margin-bottom:24px}
+.btn-white{display:inline-flex;align-items:center;gap:8px;background:var(--wh);color:var(--br);font-family:'Raleway',sans-serif;font-size:.65rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:16px 32px;text-decoration:none;border-radius:8px;border:none;cursor:pointer;transition:all .3s}
+.btn-white:hover{background:var(--bei2);transform:translateY(-2px)}
+
+/* ── URGENCIA ── */
+.urgencia{background:var(--bei2);padding:80px}
+.urgencia-icon{text-align:center;font-size:2.5rem;margin-bottom:16px}
+.urgencia-title{font-family:'Raleway',sans-serif;font-weight:800;font-size:clamp(1.5rem,3vw,2.2rem);text-align:center;color:var(--tx);margin-bottom:48px}
+.urgencia-title .red{color:var(--g)}
+.urg-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:40px}
+.urg-card{background:var(--wh);border-radius:12px;padding:32px 28px;text-align:center;border:1px solid rgba(204,197,177,.5)}
+.urg-card-icon{font-size:2rem;margin-bottom:16px}
+.urg-card-title{font-weight:700;font-size:1rem;color:var(--g);margin-bottom:12px}
+.urg-card-text{font-size:.82rem;line-height:1.8;color:var(--txm);font-weight:300}
+.urg-bottom{background:var(--g);border-radius:16px;padding:36px;text-align:center}
+.urg-bottom-title{font-weight:800;font-size:1.1rem;color:var(--wh);margin-bottom:14px}
+.urg-bottom-emoji{margin-right:8px}
+.urg-bottom-text{font-size:.9rem;color:rgba(204,197,177,.8);max-width:580px;margin:0 auto 28px;line-height:1.7}
+.urg-bottom-text b{color:var(--wh)}
+
+/* ── SOLUCIÓN ── */
+.solucion{background:var(--g);padding:80px}
+.sol-title{font-family:'Raleway',sans-serif;font-weight:800;font-size:clamp(1.5rem,3vw,2.2rem);text-align:center;color:var(--wh);margin-bottom:10px}
+.sol-title .emoji{margin-right:8px}
+.sol-sub{font-size:.9rem;color:rgba(204,197,177,.7);text-align:center;max-width:620px;margin:0 auto 48px;line-height:1.7}
+.sol-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:1000px;margin:0 auto}
+.sol-card{background:var(--wh);border-radius:16px;padding:36px}
+.sol-card-icon{font-size:2rem;text-align:center;margin-bottom:16px}
+.sol-card-title{font-weight:800;font-size:1.1rem;color:var(--tx);text-align:center;margin-bottom:24px}
+.sol-feature{display:flex;align-items:flex-start;gap:14px;margin-bottom:16px;padding:14px 16px;border-radius:8px}
+.sol-feature.green{background:rgba(3,72,55,.08)}
+.sol-feature.blue{background:rgba(160,176,181,.12)}
+.sol-feature.purple{background:rgba(90,86,61,.1)}
+.sol-feature-icon{font-size:1.2rem;flex-shrink:0;margin-top:2px}
+.sol-feature-title{font-weight:700;font-size:.85rem;color:var(--g);margin-bottom:4px}
+.sol-feature-text{font-size:.8rem;color:var(--txm);line-height:1.6;font-weight:300}
+.sol-steps{list-style:none}
+.sol-step{display:flex;align-items:flex-start;gap:16px;margin-bottom:20px}
+.sol-step-num{width:30px;height:30px;border-radius:50%;background:var(--g);color:var(--wh);font-weight:700;font-size:.85rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.sol-step-title{font-weight:700;font-size:.9rem;color:var(--tx);margin-bottom:4px}
+.sol-step-sub{font-size:.78rem;font-weight:700;color:var(--g);margin-bottom:4px}
+.sol-step-text{font-size:.8rem;color:var(--txm);line-height:1.6;font-weight:300}
+.sol-card-cta{margin-top:28px;text-align:center}
+
+/* ── SOBRE MÍ ── */
+.sobre{background:var(--wh);padding:80px}
+.sobre-inner{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;max-width:1100px;margin:0 auto}
+.sobre-left{}
+.sobre-h2{font-family:'Raleway',sans-serif;font-weight:800;font-size:clamp(1.5rem,3vw,2.2rem);color:var(--g);margin-bottom:8px;line-height:1.2}
+.sobre-subtitle{font-size:1rem;color:var(--txd);margin-bottom:24px;font-weight:400}
+.sobre-p{font-size:.86rem;line-height:1.9;color:var(--txm);font-weight:300;margin-bottom:14px}
+.sobre-p b{color:var(--g);font-weight:700}
+.sobre-cta{margin-top:28px}
+.sobre-right{position:relative}
+.sobre-photo{width:100%;border-radius:16px;background:linear-gradient(135deg,var(--bei) 0%,var(--st) 100%);aspect-ratio:3/4;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;color:rgba(3,72,55,.25);font-size:.7rem;letter-spacing:4px;text-transform:uppercase;overflow:hidden}
+.sobre-photo-icon{font-size:3rem;opacity:.3}
+
+/* ── RENDIMIENTOS ── */
+.rend{background:var(--cr);padding:60px 80px}
+.rend-card{background:var(--g);border-radius:16px;max-width:860px;margin:0 auto;padding:44px 48px;text-align:center}
+.rend-title{font-weight:800;font-size:1.4rem;color:var(--wh);margin-bottom:28px}
+.rend-items{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px}
+.rend-item{background:rgba(255,255,255,.1);border-radius:10px;padding:18px 22px;display:flex;align-items:center;gap:14px}
+.rend-item-icon{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+.rend-item-icon.green-i{background:#22c55e}
+.rend-item-icon.gold-i{background:#eab308}
+.rend-item-text{font-size:.85rem;color:var(--wh);font-weight:400;text-align:left}
+.rend-highlight{font-weight:800;font-size:1.5rem;color:var(--wh);margin-bottom:8px}
+.rend-sub{font-size:.82rem;color:rgba(204,197,177,.7);margin-bottom:24px}
+
+/* ── TESTIMONIOS ── */
+.testi-section{background:var(--wh);padding:80px}
+.testi-head{text-align:center;margin-bottom:16px}
+.testi-h2{font-weight:800;font-size:clamp(1.5rem,3vw,2.2rem);color:var(--tx);margin-bottom:10px}
+.testi-sub{font-size:.88rem;color:var(--txd);max-width:600px;margin:0 auto 6px;line-height:1.7}
+.testi-sub b{color:var(--g)}
+.testi-hint{font-size:.72rem;color:var(--g);margin-bottom:28px;font-weight:600}
+.testi-stats{display:flex;justify-content:center;gap:48px;margin-bottom:36px}
+.testi-stat-num{font-family:'Raleway',sans-serif;font-weight:800;font-size:2.2rem;color:var(--tx);text-align:center;line-height:1}
+.testi-stat-lbl{font-size:.65rem;color:var(--txd);text-align:center;margin-top:4px}
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.tc{background:var(--cr);border-radius:12px;padding:32px;border:1px solid transparent;transition:all .3s;cursor:pointer}
+.tc:hover{border-color:var(--g);transform:translateY(-3px)}
+.tc-avatar-wrap{width:100%;aspect-ratio:4/3;background:linear-gradient(135deg,var(--oli) 0%,var(--g) 100%);border-radius:8px;margin-bottom:20px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.tc-avatar-letter{font-family:'Cormorant Garamond',serif;font-size:4rem;font-weight:300;color:rgba(255,255,255,.2)}
+.tc-play{position:absolute;width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,.2);border:2px solid rgba(255,255,255,.4);display:flex;align-items:center;justify-content:center;font-size:1rem;color:var(--wh)}
+.tc-stars{color:#f59e0b;font-size:.75rem;letter-spacing:2px;margin-bottom:8px}
+.tc-q{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-style:italic;line-height:1.6;color:var(--tx);margin-bottom:16px}
+.tc-name{font-weight:700;font-size:.82rem;color:var(--tx)}
+.tc-role{font-size:.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--txd);margin-top:2px}
+
+/* ── CTA CARD WIDE ── */
+.cta-wide{background:var(--cr);padding:60px 80px}
+.cta-wide-card{max-width:780px;margin:0 auto;background:var(--g);border-radius:20px;padding:44px;text-align:center}
+.cta-wide-title{font-weight:800;font-size:1.4rem;color:var(--wh);margin-bottom:8px}
+.cta-wide-sub{font-size:.85rem;color:rgba(204,197,177,.75);margin-bottom:28px}
+.cta-wide-sub b{color:var(--wh)}
+.cta-checks-inner{background:rgba(255,255,255,.1);border-radius:12px;padding:22px 28px;margin-bottom:28px}
+.cta-checks-title{font-weight:700;font-size:.85rem;color:var(--wh);margin-bottom:14px}
+.cta-checks-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cta-check-item{display:flex;align-items:center;gap:10px;font-size:.8rem;color:rgba(232,227,213,.85)}
+.cta-check-icon{color:#22c55e;font-size:1rem;flex-shrink:0}
+
+/* ── BENEFICIOS GRID ── */
+.benefits{background:var(--g);padding:80px}
+.ben-title{font-weight:800;font-size:clamp(1.5rem,3vw,2.2rem);color:var(--wh);text-align:center;margin-bottom:8px}
+.ben-sub{font-size:.85rem;color:rgba(204,197,177,.65);text-align:center;margin-bottom:44px}
+.ben-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:1000px;margin:0 auto 36px}
+.ben-card{background:rgba(255,255,255,.07);border:1px solid rgba(204,197,177,.12);border-radius:10px;padding:24px 22px;transition:background .3s}
+.ben-card:hover{background:rgba(255,255,255,.12)}
+.ben-icon{font-size:1.4rem;margin-bottom:10px}
+.ben-title2{font-weight:700;font-size:.9rem;color:var(--wh);margin-bottom:6px}
+.ben-text{font-size:.78rem;color:rgba(204,197,177,.6);line-height:1.6;font-weight:300}
+.ben-cta-inner{text-align:center;padding-top:8px}
+.ben-cta-q{font-weight:700;font-size:1rem;color:var(--wh);margin-bottom:6px}
+.ben-cta-s{font-size:.8rem;color:rgba(204,197,177,.65);margin-bottom:20px}
+
+/* ── PROCESO ── */
+.proceso{background:var(--wh);padding:80px}
+.proc-title{font-weight:800;font-size:clamp(1.5rem,3vw,2.2rem);text-align:center;color:var(--tx);margin-bottom:48px}
+.proc-list{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+.proc-item{background:var(--cr);border-radius:14px;padding:28px 32px;display:flex;align-items:flex-start;gap:20px;border:1px solid rgba(204,197,177,.4)}
+.proc-num{width:40px;height:40px;border-radius:50%;background:var(--g);color:var(--wh);font-weight:800;font-size:1rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.proc-content{}
+.proc-header{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.proc-icon{font-size:1.1rem}
+.proc-name{font-weight:700;font-size:1rem;color:var(--tx)}
+.proc-time{font-size:.72rem;font-weight:700;color:var(--g);margin-bottom:8px}
+.proc-text{font-size:.84rem;line-height:1.8;color:var(--txm);font-weight:300}
+.proc-item-cta{margin-top:16px}
+
+/* ── ANTES VS AHORA ── */
+.ava-section{background:var(--cr);padding:80px}
+.ava-title{font-weight:800;font-size:clamp(1.5rem,3vw,2.2rem);text-align:center;color:var(--tx);margin-bottom:10px}
+.ava-sub{font-size:.88rem;color:var(--txd);text-align:center;max-width:600px;margin:0 auto 40px;line-height:1.7}
+.ava-scroll{overflow-x:auto;padding-bottom:16px;-webkit-overflow-scrolling:touch}
+.ava-row{display:flex;gap:16px;min-width:max-content;padding:4px}
+.ava-card{background:var(--wh);border-radius:12px;padding:24px;width:220px;border:1px solid rgba(204,197,177,.4);transition:border-color .3s}
+.ava-card:hover{border-color:var(--g)}
+.ava-avatar{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.ava-av{width:36px;height:36px;border-radius:50%;background:var(--g);color:var(--wh);font-weight:700;font-size:.95rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ava-name{font-weight:700;font-size:.82rem;color:var(--tx)}
+.ava-role{font-size:.6rem;color:var(--txd)}
+.ava-before{margin-bottom:12px}
+.ava-label{font-size:.55rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;display:flex;align-items:center;gap:6px;margin-bottom:6px}
+.ava-label.before{color:#dc2626}
+.ava-label.after{color:#16a34a}
+.ava-text{font-size:.78rem;color:var(--txm);line-height:1.6;font-weight:300}
+.ava-text.after{font-weight:500;color:var(--tx)}
+
+/* ── FAQ ── */
+.faq{background:var(--cr);padding:80px}
+.faq-inner{max-width:780px;margin:0 auto}
+.faq-title{font-weight:800;font-size:clamp(1.5rem,3vw,2.2rem);text-align:center;color:var(--tx);margin-bottom:48px}
+.faq-item{background:var(--wh);border-radius:10px;margin-bottom:12px;overflow:hidden;border:1px solid rgba(204,197,177,.3)}
+.faq-q{display:flex;justify-content:space-between;align-items:center;padding:20px 24px;cursor:pointer;font-weight:700;font-size:.9rem;color:var(--tx);gap:16px;transition:background .2s}
+.faq-q:hover{background:var(--cr)}
+.faq-icon{font-size:1.3rem;color:var(--g);flex-shrink:0;transition:transform .3s;font-weight:300;line-height:1}
+.faq-item.open .faq-icon{transform:rotate(45deg)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease,padding .3s}
+.faq-item.open .faq-a{max-height:240px;padding-bottom:20px}
+.faq-a p{font-size:.84rem;line-height:1.9;color:var(--txd);font-weight:300;padding:0 24px}
+.faq-bottom{background:var(--g);border-radius:16px;padding:36px;text-align:center;margin-top:36px}
+.faq-bottom-title{font-weight:800;font-size:1.1rem;color:var(--wh);margin-bottom:8px}
+.faq-bottom-sub{font-size:.82rem;color:rgba(204,197,177,.7);max-width:480px;margin:0 auto 24px;line-height:1.7}
+
+/* ── TRUST BAR ── */
+.trust-bar{background:var(--wh);padding:32px 80px;text-align:center;border-bottom:1px solid var(--bei2)}
+.trust-bar-text{font-size:.88rem;color:var(--tx)}
+.trust-bar-text b{color:var(--g)}
+.trust-bar-sub{font-size:.75rem;color:var(--txd);margin-top:4px}
+
+/* ── FINAL CTA ── */
+.final-cta{background:var(--g);background:linear-gradient(135deg,var(--g) 0%,var(--g2) 100%);padding:80px}
+.final-cta-inner{max-width:800px;margin:0 auto;text-align:center}
+.final-cta-h2{font-weight:800;font-size:clamp(1.6rem,3.5vw,2.6rem);color:var(--wh);margin-bottom:8px}
+.final-cta-sub{font-size:.88rem;color:rgba(204,197,177,.75);margin-bottom:32px}
+.final-cta-sub b{color:var(--wh)}
+.final-checks-box{background:rgba(255,255,255,.1);border-radius:12px;padding:24px 32px;margin-bottom:32px}
+.final-checks-title{font-weight:700;font-size:.9rem;color:var(--wh);margin-bottom:16px}
+.final-checks-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;text-align:left}
+.final-check{display:flex;align-items:center;gap:10px;font-size:.83rem;color:rgba(232,227,213,.85)}
+.final-check-icon{color:#22c55e;font-size:1.1rem;flex-shrink:0}
+.final-btns{display:flex;justify-content:center;gap:16px;flex-wrap:wrap}
+.btn-outline-w{display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--g);font-family:'Raleway',sans-serif;font-size:.65rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:15px 28px;text-decoration:none;border-radius:8px;border:2px solid var(--wh);cursor:pointer;transition:all .3s;color:var(--wh)}
+.btn-outline-w:hover{background:rgba(255,255,255,.1)}
+
+/* ── FOOTER ── */
+footer{background:var(--g);border-top:1px solid rgba(204,197,177,.15);padding:44px 80px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px}
+.ft-brand .ft-name{font-family:'Cormorant Garamond',serif;font-size:1.25rem;letter-spacing:5px;text-transform:uppercase;color:var(--wh);font-weight:300}
+.ft-brand .ft-tag{font-size:.46rem;letter-spacing:3px;text-transform:uppercase;color:rgba(204,197,177,.4);margin-top:4px}
+.ft-links{display:flex;gap:24px;flex-wrap:wrap}
+.ft-link{font-size:.55rem;letter-spacing:2px;text-transform:uppercase;color:rgba(232,227,213,.45);text-decoration:none;transition:color .3s}
+.ft-link:hover{color:var(--bei)}
+.ft-copy{font-size:.47rem;letter-spacing:2px;color:rgba(204,197,177,.25);text-align:right}
+
+/* ── REVEAL ── */
+.rv{opacity:0;transform:translateY(28px);transition:opacity .75s ease,transform .75s ease}
+.rv.on{opacity:1;transform:none}
+.rv-d1{transition-delay:.1s}.rv-d2{transition-delay:.2s}.rv-d3{transition-delay:.3s}.rv-d4{transition-delay:.4s}
+
+/* ── SCROLL ── */
+.ava-scroll::-webkit-scrollbar{height:4px}
+.ava-scroll::-webkit-scrollbar-track{background:var(--bei2);border-radius:4px}
+.ava-scroll::-webkit-scrollbar-thumb{background:var(--g);border-radius:4px}
+
+/* ── MOBILE ── */
+@media(max-width:900px){
+  nav{padding:14px 20px}
+  .nav-links .nav-a{display:none}
+  .hero{grid-template-columns:1fr;padding:90px 24px 60px;gap:40px}
+  .calc-section,.urgencia,.solucion,.sobre,.rend,.testi-section,.cta-wide,.benefits,.proceso,.ava-section,.faq,.final-cta{padding:60px 24px}
+  .calc-inputs{grid-template-columns:1fr}
+  .urg-grid,.sol-grid,.testi-grid,.ben-grid{grid-template-columns:1fr}
+  .sobre-inner{grid-template-columns:1fr}
+  .rend-items{grid-template-columns:1fr}
+  .cta-checks-grid,.final-checks-grid{grid-template-columns:1fr}
+  .trust-bar{padding:24px}
+  footer{flex-direction:column;text-align:center}
+  .ft-links{justify-content:center}
+  .ft-copy{text-align:center}
+}
+@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(20px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+</style>
+</head>
+<body>
+
+<!-- ══ NAV ══ -->
+<nav>
+  <div class="nav-logo">
+    <div class="nav-logo-icon">DP</div>
+    <div class="nav-logo-text">
+      <div class="nav-logo-name">David Pradis</div>
+      <div class="nav-logo-tag">Finanzas Inteligentes</div>
+    </div>
+  </div>
+  <div class="nav-links">
+    <a href="#que-es" class="nav-a">¿Qué es?</a>
+    <a href="#sobre" class="nav-a">Acerca de</a>
+    <a href="#testimonios" class="nav-a">Testimonios</a>
+    <a href="https://wa.me/525543912539?text=Hola%20David%2C%20me%20interesa%20agendar%20una%20sesi%C3%B3n%20gratuita" target="_blank" class="nav-cta">Agenda tu Sesión Gratuita</a>
+  </div>
+</nav>
+
+<!-- ══ HERO ══ -->
+<section class="hero">
+  <div class="hero-left rv">
+    <div class="hero-tag">Asesor de Finanzas Personales</div>
+    <h1 class="hero-h1">
+      Comienza tu <span class="accent">Plan de Retiro</span><br>
+      con solo <span class="accent">24 meses</span><br>
+      obligatorios
+    </h1>
+    <p class="hero-sub">Plan de retiro <b>deducible de impuestos</b> hasta 10% de tus ingresos. <b>Flexibilidad total</b> — pausa, aumenta o disminuye tus aportaciones.</p>
+    <p class="hero-sub2">Asegura tu futuro con el respaldo de más de 15 años de experiencia.</p>
+    <div class="hero-btns">
+      <a href="https://wa.me/525543912539?text=Hola%20David%2C%20me%20interesa%20agendar%20una%20sesi%C3%B3n%20gratuita" target="_blank" class="btn-green">Agenda tu Sesión Gratuita</a>
+      <a href="#calculadora" class="btn-outline-g">Calculadora Financiera</a>
+    </div>
+    <div class="hero-stars">
+      <span class="stars">★★★★★</span>
+      <span>4.9/5 — 200+ clientes satisfechos</span>
+    </div>
+  </div>
+  <div class="hero-right rv rv-d2">
+    <div class="hero-video">
+      <div class="hero-video-tag">NO SABES POR DÓNDE EMPEZAR</div>
+      <div class="hero-video-placeholder">
+        <div class="play-icon">▶</div>
+        <p>Ver video de David Pradis</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CALCULADORA ══ -->
+<section class="calc-section" id="calculadora">
+  <h2 class="calc-title rv">Calculadora Financiera 100% Personalizada</h2>
+  <div class="calc-box">
+    <div class="calc-card rv">
+      <div class="calc-card-title">🏦 Calcula tu patrimonio para los próximos 20 años</div>
+      <div class="calc-card-sub">Descubre cuánto puedes acumular con una estrategia inteligente</div>
+      <div class="calc-inputs">
+        <div class="calc-group">
+          <label>Tu edad actual</label>
+          <input class="calc-input" type="number" id="calcAge" placeholder="Ej: 30">
+        </div>
+        <div class="calc-group">
+          <label>Ahorro mensual disponible</label>
+          <input class="calc-input" type="number" id="calcSaving" placeholder="Ej: 5000" min="2000">
+          <span style="font-size:.62rem;color:var(--g);margin-top:5px;display:block;font-weight:600">Mínimo $2,000/mes</span>
+        </div>
+      </div>
+      <div class="calc-btn-wrap">
+        <button class="btn-brown" onclick="calcRetiro()">Calcular mi Retiro</button>
+      </div>
+      <div class="calc-result" id="calcResult">
+        <div class="calc-felicidades">
+          <div class="calc-felicidades-icon">🎉</div>
+          <div class="calc-felicidades-title">¡Felicitaciones!</div>
+          <div class="calc-felicidades-text">Con tu plan de ahorro podrías acumular <span class="big-num" id="calcTotal">$0</span></div>
+        </div>
+        <div class="calc-stats">
+          <div class="calc-stat">
+            <div class="calc-stat-icon">💰</div>
+            <div class="calc-stat-label">Total Aportado</div>
+            <div class="calc-stat-num" id="calcAportado">$0</div>
+          </div>
+          <div class="calc-stat">
+            <div class="calc-stat-icon">📈</div>
+            <div class="calc-stat-label">Intereses Ganados</div>
+            <div class="calc-stat-num" id="calcIntereses">$0</div>
+          </div>
+          <div class="calc-stat">
+            <div class="calc-stat-icon">🏆</div>
+            <div class="calc-stat-label">Total Acumulado</div>
+            <div class="calc-stat-num" id="calcAcumulado">$0</div>
+          </div>
+        </div>
+        <div class="calc-chart-card">
+          <div class="calc-chart-title">📊 Proyección de Crecimiento Anual</div>
+          <div class="calc-chart-wrap"><canvas id="calcChart"></canvas></div>
+        </div>
+        <button class="calc-csv-btn" onclick="downloadCSV()">📊 Descargar CSV con Proyección Detallada</button>
+      </div>
+    </div>
+    <div class="calc-cta-card rv rv-d1">
+      <div class="calc-cta-title">¿Te gustan los números que ves?</div>
+      <div class="calc-cta-sub">Hagamos tu análisis personalizado y diseñemos tu plan financiero ideal</div>
+      <a href="https://wa.me/525543912539?text=Hola%20David%2C%20me%20interesa%20agendar%20una%20sesi%C3%B3n%20gratuita" target="_blank" class="btn-white">Agenda tu Sesión Gratuita</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ URGENCIA ══ -->
+<section class="urgencia" id="que-es">
+  <div class="urgencia-icon rv">⚠️</div>
+  <h2 class="urgencia-title rv rv-d1">¿Por qué es <span class="red">URGENTE</span> tener un PPR a corta edad?</h2>
+  <div class="urg-grid">
+    <div class="urg-card rv">
+      <div class="urg-card-icon">⏰</div>
+      <div class="urg-card-title">Tiempo Perdido</div>
+      <p class="urg-card-text">Cada año que esperas, pierdes el poder del interés compuesto. Entre antes empieces, más dinero tendrás para tu retiro.</p>
+    </div>
+    <div class="urg-card rv rv-d1">
+      <div class="urg-card-icon">💰</div>
+      <div class="urg-card-title">Pensión Insuficiente</div>
+      <p class="urg-card-text">La pensión del IMSS será solo 30% de tu salario actual. ¿Te imaginas vivir a tus 65 con solo $6,000 pesos al mes?</p>
+    </div>
+    <div class="urg-card rv rv-d2">
+      <div class="urg-card-icon">📉</div>
+      <div class="urg-card-title">Inflación Devastadora</div>
+      <p class="urg-card-text">En 30 años, $100,000 pesos de hoy valdrán solo $30,000. Sin inversión, tu dinero pierde valor adquisitivo.</p>
+    </div>
+  </div>
+  <div class="urg-bottom rv">
+    <div class="urg-bottom-title">🧨 La Realidad que Nadie te Dice</div>
+    <p class="urg-bottom-text"><b>El 95% de los mexicanos NO tendrá pensión digna.</b> Si no empiezas HOY, a los 65 años dependerás de tus hijos o trabajarás hasta morir.</p>
+    <a href="https://wa.me/525543912539?text=Hola%20David%2C%20me%20interesa%20agendar%20una%20sesi%C3%B3n%20gratuita" target="_blank" class="btn-white">Agenda tu Sesión Gratuita</a>
+  </div>
+</section>
+
+<!-- ══ SOLUCIÓN ══ -->
+<section class="solucion">
+  <h2 class="sol-title rv"><span class="emoji">🎯</span> La SOLUCIÓN: Plan Personal de Retiro (PPR)</h2>
+  <p class="sol-sub rv rv-d1">El único instrumento que te permite ahorrar para tu retiro con beneficios fiscales y la flexibilidad que necesitas</p>
+  <div class="sol-grid">
+    <div class="sol-card rv">
+      <div class="sol-card-icon">🎯</div>
+      <div class="sol-card-title">¿Por qué elegir un PPR?</div>
+      <div class="sol-feature green">
+        <div class="sol-feature-icon">💰</div>
+        <div>
+          <div class="sol-feature-title">Ahorro en Impuestos</div>
+          <div class="sol-feature-text"><b>Deduce hasta $200,000 pesos anuales</b> de tus impuestos. Es como si el gobierno te regalara dinero para tu retiro.</div>
+        </div>
+      </div>
+      <div class="sol-feature blue">
+        <div class="sol-feature-icon">🛡️</div>
+        <div>
+          <div class="sol-feature-title">Protección Total</div>
+          <div class="sol-feature-text"><b>Tu dinero está 100% protegido</b> en un fideicomiso separado. Ni siquiera la aseguradora puede tocarlo.</div>
+        </div>
+      </div>
+      <div class="sol-feature purple">
+        <div class="sol-feature-icon">📈</div>
+        <div>
+          <div class="sol-feature-title">Crecimiento Garantizado</div>
+          <div class="sol-feature-text">Portafolios de inversión para diversificar y maximizar tus rendimientos con el menor riesgo.</div>
+        </div>
+      </div>
+    </div>
+    <div class="sol-card rv rv-d1">
+      <div class="sol-card-icon">🚀</div>
+      <div class="sol-card-title">Cómo Empezar HOY</div>
+      <ul class="sol-steps">
+        <li class="sol-step">
+          <div class="sol-step-num">1</div>
+          <div>
+            <div class="sol-step-title">Consulta Gratuita</div>
+            <div class="sol-step-sub"></div>
+            <div class="sol-step-text"><b>15 minutos</b> para analizar tu situación actual y diseñar tu estrategia personalizada.</div>
+          </div>
+        </li>
+        <li class="sol-step">
+          <div class="sol-step-num">2</div>
+          <div>
+            <div class="sol-step-title">Apertura Inmediata</div>
+            <div class="sol-step-sub"></div>
+            <div class="sol-step-text"><b>Mismo día</b> abrimos tu PPR. Sin papeleo complicado, todo digital y 100% seguro.</div>
+          </div>
+        </li>
+        <li class="sol-step">
+          <div class="sol-step-num">3</div>
+          <div>
+            <div class="sol-step-title">Acompañamiento Total</div>
+            <div class="sol-step-sub"></div>
+            <div class="sol-step-text"><b>15+ años de experiencia</b> a tu servicio. Te guiamos paso a paso.</div>
+          </div>
+        </li>
+      </ul>
+      <div class="sol-card-cta">
+        <a href="https://wa.me/525543912539?text=Hola%20David%2C%20me%20interesa%20agendar%20una%20sesi%C3%B3n%20gratuita" target="_blank" class="btn-green">Agenda tu Sesión Gratuita</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SOBRE MÍ ══ -->
+<section class="sobre" id="sobre">
+  <div class="sobre-inner">
+    <div class="sobre-left rv">
+      <h2 class="sobre-h2">Construyamos tu Plan de Retiro con solo 24 meses obligatorios</h2>
+      <p class="sobre-subtitle">David Pradis, Especialista en Planes de Retiro</p>
+      <p class="sobre-p">¡Hola! Soy David Pradis, Especialista en Planes de Retiro y Finanzas Personales, he asesorado a más de 200 personas como tú, para construir un futuro financiero sólido.</p>
+      <p class="sobre-p"><b>Mi misión:</b> Simplificar el complejo mundo de las finanzas personales y hacer que el ahorro para el retiro sea accesible, inteligente y rentable para todos.</p>
+      <p class="sobre-p"><b>Mi experiencia:</b> Certificado en las principales aseguradoras del país, con un enfoque especializado en optimización fiscal y estrategias de inversión personalizadas.</p>
+      <div class="sobre-cta">
+        <a href="https://wa.me/525543912539?text=Hola%20David%2C%20me%20interesa%20agendar%20una%20sesi%C3%B3n%20gratuita" target="_blank" class="btn-green">Agenda tu Sesión Gratuita</a>
+      </div>
+    </div>
+    <div class="sobre-right rv rv-d2">
+      <div class="sobre-photo">
+        <div class="sobre-photo-icon">📷</div>
+        <span style="font-size:.65rem;letter-spacing:4px;text-transform:uppercase;color:rgba(3,72,55,.25)">Tu foto aquí</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ RENDIMIENTOS ══ -->
+<section class="rend">
+  <div class="rend-card rv">
+    <div class="rend-title">El Dinero que Estás Perdiendo Sin un Plan</div>
+    <div class="rend-items">
+      <div class="rend-item">
+        <div class="rend-item-icon green-i">💰</div>
+        <div class="rend-item-text">Ahorras $3,000 al mes sin estrategia</div>
+      </div>
+      <div class="rend-item">
+        <div class="rend-item-icon gold-i">💸</div>
+        <div class="rend-item-text">Con el plan correcto el SAT te regresa hasta $7,200 anuales*</div>
+      </div>
+    </div>
+    <div class="rend-highlight">¡Ya tienes un rendimiento del 20% antes de invertir!</div>
+    <div class="rend-sub">A esto se suma el interés compuesto que genera tu patrimonio acumulado.</div>
+    <a href="https://wa.me/525543912539?text=Hola%20David%2C%20me%20interesa%20agendar%20una%20sesi%C3%B3n%20gratuita" target="_blank" class="btn-white">Agenda tu Sesión Gratuita</a>
+  </div>
+</section>
+
+<!-- ══ TESTIMONIOS ══ -->
+<section class="testi-section" id="testimonios">
+  <div class="testi-head rv">
+    <h2 class="testi-h2">¿Qué Dicen Nuestros Clientes?</h2>
+    <p class="testi-sub">Descubre por qué más de <b>200 clientes</b> eligieron trabajar con David y cómo transformaron su futuro financiero</p>
+    <div class="testi-hint">⭐ Casos de éxito reales</div>
+  </div>
+  <div class="testi-stats rv rv-d1">
+    <div>
+      <div class="testi-stat-num">4.9/5</div>
+      <div class="testi-stat-lbl">Calificación promedio</div>
+    </div>
+    <div>
+      <div class="testi-stat-num">200+</div>
+      <div class="testi-stat-lbl">Clientes satisfechos</div>
+    </div>
+  </div>
+  <div class="testi-grid">
+    <div class="tc rv">
+      <div class="tc-avatar-wrap"><div class="tc-avatar-letter">M</div><div class="tc-play">▶</div></div>
+      <div class="tc-stars">★★★★★</div>
+      <p class="tc-q">"En 6 meses liquidé una deuda que cargaba 3 años. David me dio el plan Y la claridad mental para ejecutarlo."</p>
+      <div class="tc-name">Mariana Flores</div>
+      <div class="tc-role">Profesora · Guadalajara, 34 años</div>
+    </div>
+    <div class="tc rv rv-d1">
+      <div class="tc-avatar-wrap"><div class="tc-avatar-letter">R</div><div class="tc-play">▶</div></div>
+      <div class="tc-stars">★★★★★</div>
+      <p class="tc-q">"Por primera vez en mi vida tengo fondo de emergencia e inversiones activas. Pensé que no era para mí."</p>
+      <div class="tc-name">Ricardo Moreno</div>
+      <div class="tc-role">Ingeniero · CDMX, 29 años</div>
+    </div>
+    <div class="tc rv rv-d2">
+      <div class="tc-avatar-wrap"><div class="tc-avatar-letter">S</div><div class="tc-play">▶</div></div>
+      <div class="tc-stars">★★★★★</div>
+      <p class="tc-q">"Triplicamos nuestros ahorros en 18 meses. David nos enseñó a hablar de dinero como pareja sin pelear."</p>
+      <div class="tc-name">Sofía & Pablo Ruiz</div>
+      <div class="tc-role">Emprendedores · Monterrey, 32 años</div>
+    </div>
+    <div class="tc rv">
+      <div class="tc-avatar-wrap"><div class="tc-avatar-letter">C</div><div class="tc-play">▶</div></div>
+      <div class="tc-stars">★★★★★</div>
+      <p class="tc-q">"Pude deducir mucho más de lo que pensaba. Con la asesoría fiscal de David recuperé $18,000 del SAT."</p>
+      <div class="tc-name">Carlos Mendoza</div>
+      <div class="tc-role">Médico · Guadalajara, 41 años</div>
+    </div>
+    <div class="tc rv rv-d1">
+      <div class="tc-avatar-wrap"><div class="tc-avatar-letter">A</div><div class="tc-play">▶</div></div>
+      <div class="tc-stars">★★★★★</div>
+      <p class="tc-q">"En 7 días ya tenía mi primer portafolio activo con David. El proceso fue sorprendentemente fácil y transparente."</p>
+      <div class="tc-name">Ana Martínez</div>
+      <div class="tc-role">Ejecutiva · CDMX, 28 años</div>
+    </div>
+    <div class="tc rv rv-d2">
+      <div class="tc-avatar-wrap"><div class="tc-avatar-letter">L</div><div class="tc-play">▶</div></div>
+      <div class="tc-stars">★★★★★</div>
+      <p class="tc-q">"El acompañamiento personalizado de David me dio confianza desde el primer día. 30% de rendimiento en un año."</p>
+      <div class="tc-name">Laura Fernández</div>
+      <div class="tc-role">Diseñadora · Monterrey, 31 años</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CTA WIDE ══ -->
+<section class="cta-wide">
+  <div class="cta-wide-card rv">
+    <div class="cta-wide-title">¿Listo para Transformar tus Finanzas?</div>
+    <p class="cta-wide-sub">Únete a más de <b>200 clientes</b> que ya están construyendo su libertad financiera</p>
+    <div class="cta-checks-inner">
+      <div class="cta-checks-title">¿Qué obtienes en tu consulta gratuita?</div>
+      <div class="cta-checks-grid">
+        <div class="cta-check-item"><span class="cta-check-icon">✅</span>Diagnóstico de tu situación actual</div>
+        <div class="cta-check-item"><span class="cta-check-icon">✅</span>Proyección financiera personalizada</div>
+        <div class="cta-check-item"><span class="cta-check-icon">✅</span>Estrategia de ahorro e inversión</div>
+        <div class="cta-check-item"><span class="cta-check-icon">✅</span>Beneficios fiscales detallados</div>
+      </div>
+    </div>
+    <a href="https://wa.me/525543912539?text=Hola%20David%2C%20me%20interesa%20agendar%20una%20sesi%C3%B3n%20gratuita" target="_blank" class="btn-white">Agenda tu Consultoría Gratuita</a>
+  </div>
+</section>
+
+<!-- ══ BENEFICIOS GRID ══ -->
+<section class="benefits">
+  <div class="ben-title rv">🎯 ESTOY LISTO para ayudarte</div>
+  <div class="ben-sub rv rv-d1">Esto es lo que tendrás cuando trabajemos juntos</div>
+  <div class="ben-grid">
+    <div class="ben-card rv">
+      <div class="ben-icon">💰</div>
+      <div class="ben-title2">Ahorro en Impuestos</div>
+      <div class="ben-text">Deduce hasta 10% de tus ingresos anuales ante el SAT</div>
+    </div>
+    <div class="ben-card rv rv-d1">
+      <div class="ben-icon">🛡️</div>
+      <div class="ben-title2">Protección Total</div>
+      <div class="ben-text">Fideicomiso separado, tu dinero 100% seguro</div>
+    </div>
+    <div class="ben-card rv rv-d2">
+      <div class="ben-icon">📊</div>
+      <div class="ben-title2">Portafolios de Inversión</div>
+      <div class="ben-text">Diversificación en pesos, UDIS, dólares y activos internacionales</div>
+    </div>
+    <div class="ben-card rv rv-d1">
+      <div class="ben-icon">🔄</div>
+      <div class="ben-title2">Flexibilidad</div>
+      <div class="ben-text">Pausa después de 24 meses sin perder nada</div>
+    </div>
+    <div class="ben-card rv rv-d2">
+      <div class="ben-icon">🤝</div>
+      <div class="ben-title2">Asesoría Personal</div>
+      <div class="ben-text">15+ años de experiencia a tu servicio</div>
+    </div>
+    <div class="ben-card rv rv-d3">
+      <div class="ben-icon">📈</div>
+      <div class="ben-title2">Valuación Diaria</div>
+      <div class="ben-text">NAV diario, transparencia total</div>
+    </div>
+    <div class="ben-card rv">
+      <div class="ben-icon">🏛️</div>
+      <div class="ben-title2">Marco Legal</div>
+      <div class="ben-text">Art. 151 LISR, regulado por CNSF</div>
+    </div>
+    <div class="ben-card rv rv-d1">
+      <div class="ben-icon">🎯</div>
+      <div class="ben-title2">Estrategia Personal</div>
+      <div class="ben-text">Plan diseñado específicamente para ti</div>
+    </div>
+    <div class="ben-card rv rv-d2">
+      <div class="ben-icon">📞</div>
+      <div class="ben-title2">Soporte Continuo</div>
+      <div class="ben-text">Acompañamiento durante todo el proceso</div>
+    </div>
+  </div>
+  <div class="ben-cta-inner rv">
+    <div class="ben-cta-q">¿Quieres estos beneficios para tus finanzas?</div>
+    <div class="ben-cta-s">Agenda tu llamada gratuita y descubre cómo obtenerlos</div>
+    <a href="https://wa.me/525543912539?text=Hola%20David%2C%20me%20interesa%20agendar%20una%20sesi%C3%B3n%20gratuita" target="_blank" class="btn-white">Agenda tu Llamada Gratuita</a>
+  </div>
+</section>
+
+<!-- ══ PROCESO ══ -->
+<section class="proceso">
+  <h2 class="proc-title rv">Mi Proceso Detallado de Asesoría</h2>
+  <div class="proc-list">
+    <div class="proc-item rv">
+      <div class="proc-num">1</div>
+      <div class="proc-content">
+        <div class="proc-header"><span class="proc-icon">📞</span><span class="proc-name">Consulta Inicial Gratuita</span></div>
+        <div class="proc-time">30 minutos por Zoom o WhatsApp</div>
+        <p class="proc-text">Analizo tu situación actual: ingresos, gastos, deudas y metas. Identificamos oportunidades de mejora inmediata y optimización fiscal.</p>
+        <div class="proc-item-cta"><a href="https://wa.me/525543912539?text=Hola%20David%2C%20me%20interesa%20agendar%20una%20sesi%C3%B3n%20gratuita" target="_blank" class="btn-green">Agendar Consulta Gratuita</a></div>
+      </div>
+    </div>
+    <div class="proc-item rv rv-d1">
+      <div class="proc-num">2</div>
+      <div class="proc-content">
+        <div class="proc-header"><span class="proc-icon">📊</span><span class="proc-name">Análisis Personalizado</span></div>
+        <div class="proc-time">24-48 horas de trabajo</div>
+        <p class="proc-text">Creo 3 escenarios financieros: conservador, moderado y agresivo. Calculo proyecciones a 10, 20 y 30 años con diferentes estrategias de ahorro e inversión.</p>
+      </div>
+    </div>
+    <div class="proc-item rv rv-d1">
+      <div class="proc-num">3</div>
+      <div class="proc-content">
+        <div class="proc-header"><span class="proc-icon">💻</span><span class="proc-name">Sesión de Presentación</span></div>
+        <div class="proc-time">45-60 minutos por Zoom</div>
+        <p class="proc-text">Te explico cada escenario, beneficios fiscales, estrategias de inversión disponibles y respondo todas tus dudas. Sin presión, solo información de valor.</p>
+      </div>
+    </div>
+    <div class="proc-item rv rv-d1">
+      <div class="proc-num">4</div>
+      <div class="proc-content">
+        <div class="proc-header"><span class="proc-icon">⚙️</span><span class="proc-name">Implementación del Plan</span></div>
+        <div class="proc-time">7 días hábiles máximo</div>
+        <p class="proc-text">Te guío paso a paso en la apertura e implementación de tu estrategia. Reviso cada etapa y me aseguro de que entiendas y estés cómodo con cada decisión.</p>
+      </div>
+    </div>
+    <div class="proc-item rv rv-d1">
+      <div class="proc-num">5</div>
+      <div class="proc-content">
+        <div class="proc-header"><span class="proc-icon">🤝</span><span class="proc-name">Acompañamiento Continuo</span></div>
+        <div class="proc-time">Seguimiento permanente</div>
+        <p class="proc-text">Revisión semestral de rendimientos, ajustes de estrategia según el mercado y tu situación, optimización fiscal anual y soporte disponible para cualquier duda.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ ANTES VS AHORA ══ -->
+<section class="ava-section">
+  <h2 class="ava-title rv">Antes vs Ahora: Transformaciones Reales</h2>
+  <p class="ava-sub rv rv-d1">Descubre cómo nuestros clientes pasaron de no saber qué hacer con su dinero a tener un futuro financiero sólido</p>
+  <div class="ava-scroll rv rv-d2">
+    <div class="ava-row">
+      <div class="ava-card">
+        <div class="ava-avatar"><div class="ava-av">M</div><div><div class="ava-name">María González</div><div class="ava-role">Ejecutiva, 32 años</div></div></div>
+        <div class="ava-before"><div class="ava-label before">✗ ANTES</div><p class="ava-text">No tenía idea de qué hacer con mi dinero, solo lo tenía en el banco perdiendo valor.</p></div>
+        <div><div class="ava-label after">✓ AHORA</div><p class="ava-text after">Tengo un plan financiero que me genera 20% de rendimiento anual y puedo deducir impuestos.</p></div>
+      </div>
+      <div class="ava-card">
+        <div class="ava-avatar"><div class="ava-av">A</div><div><div class="ava-name">Ana Martínez</div><div class="ava-role">Profesional, 29 años</div></div></div>
+        <div class="ava-before"><div class="ava-label before">✗ ANTES</div><p class="ava-text">Estaba estresada porque no sabía cómo empezar a invertir mi dinero de forma segura.</p></div>
+        <div><div class="ava-label after">✓ AHORA</div><p class="ava-text after">En 7 días ya tenía mi estrategia activa con David. Soporte 24/7 y resultados reales.</p></div>
+      </div>
+      <div class="ava-card">
+        <div class="ava-avatar"><div class="ava-av">L</div><div><div class="ava-name">Laura Fernández</div><div class="ava-role">Médica, 28 años</div></div></div>
+        <div class="ava-before"><div class="ava-label before">✗ ANTES</div><p class="ava-text">Pagaba muchos impuestos y no sabía cómo optimizar mis finanzas legalmente.</p></div>
+        <div><div class="ava-label after">✓ AHORA</div><p class="ava-text after">Con la asesoría fiscal de David pude deducir mucho más. Conozco perfectamente mi estrategia.</p></div>
+      </div>
+      <div class="ava-card">
+        <div class="ava-avatar"><div class="ava-av">C</div><div><div class="ava-name">Carlos Ruiz</div><div class="ava-role">Empresario, 38 años</div></div></div>
+        <div class="ava-before"><div class="ava-label before">✗ ANTES</div><p class="ava-text">No sabía cómo diversificar mis inversiones y pagaba demasiados impuestos innecesariamente.</p></div>
+        <div><div class="ava-label after">✓ AHORA</div><p class="ava-text after">Portafolio diversificado, deducciones fiscales optimizadas y seguimiento personalizado cada mes.</p></div>
+      </div>
+      <div class="ava-card">
+        <div class="ava-avatar"><div class="ava-av">R</div><div><div class="ava-name">Roberto Silva</div><div class="ava-role">Ingeniero, 35 años</div></div></div>
+        <div class="ava-before"><div class="ava-label before">✗ ANTES</div><p class="ava-text">Solo guardaba dinero en el banco sin saber cómo hacerlo crecer de forma inteligente.</p></div>
+        <div><div class="ava-label after">✓ AHORA</div><p class="ava-text after">David me enseñó a invertir inteligentemente. En 2 años ya veo resultados reales en mi patrimonio.</p></div>
+      </div>
+      <div class="ava-card">
+        <div class="ava-avatar"><div class="ava-av">P</div><div><div class="ava-name">Patricia López</div><div class="ava-role">Contadora, 33 años</div></div></div>
+        <div class="ava-before"><div class="ava-label before">✗ ANTES</div><p class="ava-text">Quería transparencia total en mis finanzas pero no encontraba a alguien de confianza.</p></div>
+        <div><div class="ava-label after">✓ AHORA</div><p class="ava-text after">La transparencia y el seguimiento constante de David me dan la confianza que buscaba.</p></div>
+      </div>
+      <div class="ava-card">
+        <div class="ava-avatar"><div class="ava-av">J</div><div><div class="ava-name">José Mendoza</div><div class="ava-role">Abogado, 41 años</div></div></div>
+        <div class="ava-before"><div class="ava-label before">✗ ANTES</div><p class="ava-text">Necesitaba alguien con experiencia real que me explicara todo con claridad y sin tecnicismos.</p></div>
+        <div><div class="ava-label after">✓ AHORA</div><p class="ava-text after">8 años de experiencia se notan. David me dio confianza desde el primer día. Recomiendo 100%.</p></div>
+      </div>
+      <div class="ava-card">
+        <div class="ava-avatar"><div class="ava-av">S</div><div><div class="ava-name">Sofía Herrera</div><div class="ava-role">Diseñadora, 27 años</div></div></div>
+        <div class="ava-before"><div class="ava-label before">✗ ANTES</div><p class="ava-text">Tenía miedo de invertir mi dinero por no saber por dónde empezar ni en quién confiar.</p></div>
+        <div><div class="ava-label after">✓ AHORA</div><p class="ava-text after">El acompañamiento de David me dio confianza. Cada detalle explicado y ahora mi dinero crece.</p></div>
+      </div>
+      <div class="ava-card">
+        <div class="ava-avatar"><div class="ava-av">C</div><div><div class="ava-name">Carmen Vega</div><div class="ava-role">Directora, 44 años</div></div></div>
+        <div class="ava-before"><div class="ava-label before">✗ ANTES</div><p class="ava-text">Había postergado mi planificación financiera por años porque no sabía cómo crear un plan realista.</p></div>
+        <div><div class="ava-label after">✓ AHORA</div><p class="ava-text after">David me ayudó a crear un plan alcanzable. Hoy estoy en camino a la libertad financiera que soñé.</p></div>
+      </div>
+      <div class="ava-card">
+        <div class="ava-avatar"><div class="ava-av">G</div><div><div class="ava-name">Guillermo Pérez</div><div class="ava-role">Emprendedor, 39 años</div></div></div>
+        <div class="ava-before"><div class="ava-label before">✗ ANTES</div><p class="ava-text">Tenía irregularidad en mis aportaciones y no veía crecimiento real en mi patrimonio.</p></div>
+        <div><div class="ava-label after">✓ AHORA</div><p class="ava-text after">La disciplina del plan de David y el soporte continuo me dan claridad y resultados visibles.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FAQ ══ -->
+<section class="faq">
+  <div class="faq-inner">
+    <h2 class="faq-title rv">Preguntas Frecuentes</h2>
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">¿Qué pasa si no puedo aportar un mes? <span class="faq-icon">+</span></div>
+        <div class="faq-a"><p>Desde el mes 1 hasta el mes 24 tienes 2 meses de gracia. A partir del mes 24 tendrás 13 meses de gracia. Si utilizas un mes de gracia, puedes reponerlo y lo podrás volver a usar en el futuro.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">¿Cuánto puedo deducir de impuestos? <span class="faq-icon">+</span></div>
+        <div class="faq-a"><p>Hasta 10% de tus ingresos anuales con un tope de 5 UMA anuales (sujeto al límite global de deducciones).</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">¿Cómo funcionan los portafolios? <span class="faq-icon">+</span></div>
+        <div class="faq-a"><p>Puedes elegir entre portafolios en pesos, dólares, UDIS y temáticos.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">¿Puedo retirar dinero antes de tiempo? <span class="faq-icon">+</span></div>
+        <div class="faq-a"><p>Sí, desde el mes 25 puedes hacer retiros parciales (costo 6%, mínimo $15,000). También puedes pedir préstamos hasta 40% de tu saldo comprometido.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">¿Cuál es la aportación mínima? <span class="faq-icon">+</span></div>
+        <div class="faq-a"><p>Desde $2,000/mes para planes de 15-25 años o $3,000 para planes de 10-14 años.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">¿Qué es la suspensión libre? <span class="faq-icon">+</span></div>
+        <div class="faq-a"><p>Después del mes 24 puedes pausar tus aportaciones sin perder lo ahorrado. El dinero sigue creciendo y no estás obligado a reponer lo no aportado.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">¿Cómo funcionan los préstamos dentro de la póliza? <span class="faq-icon">+</span></div>
+        <div class="faq-a"><p>Puedes pedir desde $10,000 hasta 50% de tu saldo comprometido. La tasa es desde 1% mensual y tu inversión sigue trabajando mientras tienes el préstamo.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">¿Qué es el Bono de Fidelidad? <span class="faq-icon">+</span></div>
+        <div class="faq-a"><p>Durante el ahorro, a partir del año 10, una mensualidad al año será depositada a tu cuenta como bono. Además, al término del plazo, el 1% del valor del fondo anual será depositado anualmente. Es decir, tendrás 1% más de rendimiento además del rendimiento de tu portafolio.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">¿Cómo recibo mis estados de cuenta? <span class="faq-icon">+</span></div>
+        <div class="faq-a"><p>Recibes estados de cuenta semestrales y están disponibles en el portal. Tienes 30 días para hacer aclaraciones si es necesario.</p></div>
+      </div>
+    </div>
+    <div class="faq-bottom rv">
+      <div class="faq-bottom-title">¿Tienes más preguntas?</div>
+      <p class="faq-bottom-sub">En tu sesión gratuita resolvemos todas tus dudas y diseñamos tu estrategia personalizada</p>
+      <a href="https://wa.me/525543912539?text=Hola%20David%2C%20me%20interesa%20agendar%20una%20sesi%C3%B3n%20gratuita" target="_blank" class="btn-white">Agenda tu Sesión Gratuita</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ TRUST BAR ══ -->
+<div class="trust-bar rv">
+  <div class="trust-bar-text"><b>200+ clientes</b> ya construyen su futuro financiero con David Pradis</div>
+  <div class="trust-bar-sub">8 años de experiencia · Asesoría en todo México · Transparencia total</div>
+</div>
+
+<!-- ══ FINAL CTA ══ -->
+<section class="final-cta" id="agenda">
+  <div class="final-cta-inner rv">
+    <h2 class="final-cta-h2">Agenda tu Sesión Gratuita</h2>
+    <p class="final-cta-sub"><b>30 minutos</b> pueden cambiar tu futuro financiero. Sin compromiso, sin costo.</p>
+    <div class="final-checks-box">
+      <div class="final-checks-title">¿Qué obtienes en tu consulta?</div>
+      <div class="final-checks-grid">
+        <div class="final-check"><span class="final-check-icon">✅</span>Diagnóstico financiero personalizado</div>
+        <div class="final-check"><span class="final-check-icon">✅</span>Proyección de tu patrimonio ideal</div>
+        <div class="final-check"><span class="final-check-icon">✅</span>Estrategia de ahorro e inversión</div>
+        <div class="final-check"><span class="final-check-icon">✅</span>Beneficios fiscales detallados</div>
+      </div>
+    </div>
+    <div class="final-btns">
+      <a href="https://wa.me/525543912539?text=Hola%20David%2C%20me%20interesa%20agendar%20una%20sesi%C3%B3n%20gratuita" class="btn-white">Agenda tu Sesión Gratuita</a>
+      <a href="#calculadora" class="btn-outline-w">Calculadora Financiera</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="ft-brand">
+    <div class="ft-name">David Pradis</div>
+    <div class="ft-tag">Finanzas Inteligentes</div>
+  </div>
+  <div class="ft-links">
+    <a href="#" class="ft-link">Instagram</a>
+    <a href="#" class="ft-link">LinkedIn</a>
+    <a href="#" class="ft-link">YouTube</a>
+    <a href="#" class="ft-link">Podcast</a>
+    <a href="https://wa.me/525543912539?text=Hola%20David%2C%20me%20interesa%20agendar%20una%20sesi%C3%B3n%20gratuita" target="_blank" class="ft-link">Agendar Sesión</a>
+  </div>
+  <div class="ft-copy">© 2025 David Pradis<br>Todos los derechos reservados</div>
+</footer>
+
+<script>
+/* REVEAL */
+const rvEls=document.querySelectorAll('.rv');
+const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('on')})},{threshold:.07});
+rvEls.forEach(el=>io.observe(el));
+
+/* NAV SHRINK */
+window.addEventListener('scroll',()=>{
+  document.querySelector('nav').style.padding=window.scrollY>60?'12px 56px':'16px 56px';
+});
+
+/* CALCULADORA */
+let calcChartInstance = null;
+let calcCSVData = [];
+
+function showCalcError(msg){
+  // Remove existing toast if any
+  const old = document.getElementById('calcToast');
+  if(old) old.remove();
+  const toast = document.createElement('div');
+  toast.id = 'calcToast';
+  toast.textContent = msg;
+  toast.style.cssText = 'position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#dc2626;color:#fff;padding:16px 28px;border-radius:12px;font-size:.92rem;font-weight:700;font-family:Raleway,sans-serif;z-index:9999;box-shadow:0 8px 32px rgba(0,0,0,.25);max-width:90vw;text-align:center;animation:toastIn .3s ease';
+  document.body.appendChild(toast);
+  setTimeout(()=>{ toast.style.opacity='0'; toast.style.transition='opacity .4s'; setTimeout(()=>toast.remove(),400); }, 4000);
+}
+function hideCalcError(){}
+
+function calcRetiro(){
+  hideCalcError();
+  const age = parseInt(document.getElementById('calcAge').value);
+  const monthly = parseFloat(document.getElementById('calcSaving').value);
+
+  if(!age || age < 15 || age > 64){
+    showCalcError('⚠️ Ingresa una edad válida entre 15 y 64 años.');
+    return;
+  }
+  if(!monthly || monthly <= 0){
+    showCalcError('⚠️ Ingresa un monto de ahorro mensual.');
+    return;
+  }
+  if(monthly < 2000){
+    showCalcError('⚠️ La aportación mínima es de $2,000 mensuales.');
+    return;
+  }
+
+  const RATE = 0.11;
+  const monthlyRate = RATE / 12;
+  const targetAge = 65;
+  const years = targetAge - age;
+  const months = years * 12;
+
+  const totalAportado = monthly * months;
+  const totalAcumulado = monthly * ((Math.pow(1 + monthlyRate, months) - 1) / monthlyRate);
+  const totalIntereses = totalAcumulado - totalAportado;
+
+  const labels = [], dataAcumulado = [], dataInvertido = [];
+  calcCSVData = [['Edad','Total Invertido','Total Acumulado','Intereses Ganados']];
+  for(let y = 1; y <= years; y++){
+    const m = y * 12;
+    const acum = monthly * ((Math.pow(1 + monthlyRate, m) - 1) / monthlyRate);
+    const inv = monthly * m;
+    labels.push(age + y);
+    dataAcumulado.push(Math.round(acum));
+    dataInvertido.push(Math.round(inv));
+    calcCSVData.push([age + y, Math.round(inv), Math.round(acum), Math.round(acum - inv)]);
+  }
+
+  document.getElementById('calcResult').classList.add('show');
+  document.getElementById('calcResult').scrollIntoView({behavior:'smooth', block:'nearest'});
+
+  animateNum('calcTotal', totalAcumulado, '$');
+  animateNum('calcAportado', totalAportado, '$');
+  animateNum('calcIntereses', totalIntereses, '$');
+  animateNum('calcAcumulado', totalAcumulado, '$');
+
+  const ctx = document.getElementById('calcChart').getContext('2d');
+  if(calcChartInstance) calcChartInstance.destroy();
+  calcChartInstance = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: 'Total Acumulado',
+          data: dataAcumulado,
+          borderColor: '#553519',
+          backgroundColor: 'rgba(85,53,25,.12)',
+          borderWidth: 2.5,
+          fill: true,
+          tension: 0.4,
+          pointRadius: 0,
+          pointHoverRadius: 5,
+        },
+        {
+          label: 'Total Invertido',
+          data: dataInvertido,
+          borderColor: '#034837',
+          backgroundColor: 'rgba(3,72,55,.06)',
+          borderWidth: 1.5,
+          fill: true,
+          tension: 0.4,
+          pointRadius: 0,
+          pointHoverRadius: 4,
+          borderDash: [4,4],
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: { font: {family:'Raleway', size:11}, usePointStyle: true, padding: 20 }
+        },
+        tooltip: {
+          callbacks: { label: ctx => ctx.dataset.label + ': $' + ctx.parsed.y.toLocaleString('es-MX') }
+        }
+      },
+      scales: {
+        x: {
+          grid: {color:'rgba(204,197,177,.2)'},
+          ticks: { font:{family:'Raleway',size:10}, color:'#8A8070',
+            callback: (v,i) => labels[i] % 2 === 0 ? labels[i] : '' }
+        },
+        y: {
+          grid: {color:'rgba(204,197,177,.2)'},
+          ticks: {
+            font:{family:'Raleway',size:10}, color:'#8A8070',
+            callback: v => v >= 1000000 ? '$' + Math.round(v/1000000) + 'M' : '$' + Math.round(v/1000) + 'K'
+          }
+        }
+      }
+    }
+  });
+}
+
+function animateNum(id, target, prefix=''){
+  const el = document.getElementById(id);
+  const dur = 1600, start = performance.now();
+  (function tick(now){
+    const p = Math.min((now - start) / dur, 1);
+    el.textContent = prefix + Math.round((1 - Math.pow(1 - p, 3)) * target).toLocaleString('es-MX');
+    if(p < 1) requestAnimationFrame(tick);
+  })(performance.now());
+}
+
+function downloadCSV(){
+  const csv = calcCSVData.map(r => r.join(',')).join('\n');
+  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'proyeccion-retiro-david-pradis.csv';
+  a.click(); URL.revokeObjectURL(url);
+}
+
+/* FAQ */
+function toggleFaq(el){
+  const item=el.parentElement;
+  const wasOpen=item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(i=>i.classList.remove('open'));
+  if(!wasOpen)item.classList.add('open');
+}
+
+/* COUNTER HERO */
+const cio=new IntersectionObserver(es=>{
+  es.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.querySelectorAll('[data-count]').forEach(el=>{
+        const target=+el.dataset.count;
+        const sfx=el.dataset.sfx||'';
+        const t0=performance.now();
+        function tick(now){
+          const p=Math.min((now-t0)/1400,1);
+          el.textContent=Math.round((1-Math.pow(1-p,3))*target)+sfx;
+          if(p<1)requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+      });
+      cio.unobserve(e.target);
+    }
+  });
+},{threshold:.3});
+</script>
+</body>
+</html>
